@@ -26,23 +26,10 @@ class UserController extends Zend_Controller_Action
 						$result = $auth->authenticate($adapter);
 					}
 					break;
-					// Google this section redirects and never returns
 				case "google":
-					if($this->_hasParam('openid_identity') && ($this->_hasParam('openid_ext1_value_email')))
-					{
-						$adapter = new TBS\Auth\Adapter\Google($this->_getAllParams());
+					if($this->_hasParam('code')) {
+						$adapter = new TBS\Auth\Adapter\Google($this->_getParam('code'));
 						$result = $auth->authenticate($adapter);
-						if (!$result->isValid()) {
-							$auth->clearIdentity('google');
-							throw new Exception('Error!!');
-						}
-						else {
-							$this->_redirect('/user/connect');
-						}
-					}
-					else {
-						$adapter = new TBS\Auth\Adapter\Google();
-						$auth->authenticate($adapter);
 					}
 					break;
 

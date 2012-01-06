@@ -41,10 +41,8 @@ class Facebook implements \Zend_Auth_Adapter_Interface
    {
       $this->_options['code'] = $requestToken;
  
-      $token = \TBS\OAuth2\Consumer::getAccessToken($this->_options);
+      $accesstoken = \TBS\OAuth2\Consumer::getAccessToken($this->_options);
  
-      $accesstoken = null;
-      parse_str($token,$accesstoken);
       $accesstoken['timestamp'] = time();
       $this->_accessToken = $accesstoken;
    }

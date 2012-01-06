@@ -56,7 +56,7 @@
 		<dd>
 			<dl>
 			<? 
-			$profile = $provider->getUserData(); 
+			$profile = $provider->getApi()->getProfile(); 
 			foreach($profile as $key => $value): 
 			?>
 				<dt><?= $key ?></dt>
