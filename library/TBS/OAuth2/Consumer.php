@@ -43,8 +43,15 @@ class Consumer {
 		$client = new \Zend_Http_Client();
 		$client->setUri($urlparams['token_url']);
 		$client->setParameterPost($authparams);
-		$response = $client->request('POST')->getBody();
-		return $response;
+		$response = $client->request('POST');
+		if($response->getHeader("Content-type") == "application/json") {
+			return (array)json_decode($response->getBody());
+		}
+		else {
+			$token;
+			parse_str($response->getBody(),$token);
+			return $token;
+		}
 	}
 
 	public static function getData($url, $accesstoken, $redirects = true)
