@@ -1,0 +1,4 @@
+This project is an example of a Zend Application which can use a combination of external login providers (Facebook, Twitter, Google) to perform authentication and use their API's.
+
+More information can be found at: http://thebestsolution.org/zend-login-with-facebook-twitter-and-google
+
