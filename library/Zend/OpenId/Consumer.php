@@ -761,9 +761,6 @@ class Zend_OpenId_Consumer
                 $r)) {
             $version = 1.1;
             $server = $r[2];
-        } else if (preg_match('/<URI>([^<]+)<\/URI>/i', $response, $r)) {
-            $version = 2.0;
-            $server = $r[1];
         } else {
             return false;
         }
@@ -863,36 +860,15 @@ class Zend_OpenId_Consumer
             if ($this->_session !== null) {
                 $this->_session->identity = $id;
                 $this->_session->claimed_id = $claimedId;
-                if ($server == 'https://www.google.com/accounts/o8/ud') {
-                    $this->_session->identity = 'http://specs.openid.net/auth/2.0/identifier_select';
-                    $this->_session->claimed_id = 'http://specs.openid.net/auth/2.0/identifier_select';
-                }
             } else if (defined('SID')) {
                 $_SESSION["zend_openid"] = array(
                     "identity" => $id,
                     "claimed_id" => $claimedId);
-                if ($server == 'https://www.google.com/accounts/o8/ud') {
-                    $_SESSION['zend_openid']['identity'] = 'http://specs.openid.net/auth/2.0/identifier_select';
-                    $_SESSION['zend_openid']['claimed_id'] = 'http://specs.openid.net/auth/2.0/identifier_select';
-                }
             } else {
                 require_once "Zend/Session/Namespace.php";
                 $this->_session = new Zend_Session_Namespace("zend_openid");
                 $this->_session->identity = $id;
                 $this->_session->claimed_id = $claimedId;
-            }
-            if ($server == 'https://www.google.com/accounts/o8/ud') {
-                $params['openid.identity'] = 'http://specs.openid.net/auth/2.0/identifier_select';
-                $params['openid.claimed_id'] = 'http://specs.openid.net/auth/2.0/identifier_select';
-                $params['openid.ns.ax'] = 'http://openid.net/srv/ax/1.0';
-                $params['openid.ax.mode'] = 'fetch_request';
-                $params['openid.ax.type.email'] = 'http://axschema.org/contact/email';
-                $params['openid.ax.type.country'] = 'http://axschema.org/contact/country/home';
-                $params['openid.ax.type.firstname'] = 'http://axschema.org/namePerson/first';
-                $params['openid.ax.type.lastname'] = 'http://axschema.org/namePerson/last';
-                $params['openid.ax.type.language'] = 'http://axschema.org/pref/language';
-                $params['openid.ax.required'] = 'country,firstname,email,language,lastname';
-                
             }
         }
 

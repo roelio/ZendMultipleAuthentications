@@ -2,6 +2,7 @@
 namespace TBS\OAuth2;
 
 class Consumer {
+
 	public static function getAuthorizationUrl($urlparams)
 	{
 		$authparams = array();

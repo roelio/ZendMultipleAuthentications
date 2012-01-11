@@ -1,13 +1,15 @@
 <?php
 namespace TBS\Auth\Identity;
 
+use \TBS\Resource\Facebook as Resource;
+
 class Facebook extends Generic
 {
 	protected $_api;
 
 	public function __construct($token)
 	{
-		$this->_api = new \TBS\Resource\Facebook($token);
+		$this->_api = new Resource($token);
 		$this->_name = 'facebook';
 		$this->_id = $this->_api->getId();
 	}
@@ -16,5 +18,4 @@ class Facebook extends Generic
 	{
 		return $this->_api;
 	}
-
 }
