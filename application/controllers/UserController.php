@@ -4,7 +4,7 @@ class UserController extends Zend_Controller_Action
 {
     public function loginAction()
     {
-        $auth = TBS\Auth::getInstance();
+        $auth = TBS_Auth::getInstance();
 
         $providers = $auth->getIdentity();
 
@@ -15,20 +15,20 @@ class UserController extends Zend_Controller_Action
             switch ($provider) {
                 case "facebook":
                     if ($this->_hasParam('code')) {
-                        $adapter = new TBS\Auth\Adapter\Facebook(
+                        $adapter = new TBS_Auth_Adapter_Facebook(
                                 $this->_getParam('code'));
                         $result = $auth->authenticate($adapter);
                     }
                     break;
                 case "twitter":
                     if ($this->_hasParam('oauth_token')) {
-                        $adapter = new TBS\Auth\Adapter\Twitter($_GET);
+                        $adapter = new TBS_Auth_Adapter_Twitter($_GET);
                         $result = $auth->authenticate($adapter);
                     }
                     break;
                 case "google":
                     if ($this->_hasParam('code')) {
-                        $adapter = new TBS\Auth\Adapter\Google(
+                        $adapter = new TBS_Auth_Adapter_Google(
                                 $this->_getParam('code'));
                         $result = $auth->authenticate($adapter);
                     }
@@ -43,17 +43,17 @@ class UserController extends Zend_Controller_Action
                 $this->_redirect('/user/connect');
             }
         } else { // Normal login page
-            $this->view->googleAuthUrl = TBS\Auth\Adapter\Google::getAuthorizationUrl();
+            $this->view->googleAuthUrl = TBS_Auth_Adapter_Google::getAuthorizationUrl();
 
-            $this->view->facebookAuthUrl = TBS\Auth\Adapter\Facebook::getAuthorizationUrl();
+            $this->view->facebookAuthUrl = TBS_Auth_Adapter_Facebook::getAuthorizationUrl();
 
-            $this->view->twitterAuthUrl = \TBS\Auth\Adapter\Twitter::getAuthorizationUrl();
+            $this->view->twitterAuthUrl = TBS_Auth_Adapter_Twitter::getAuthorizationUrl();
         }
 
     }
     public function connectAction()
     {
-        $auth = TBS\Auth::getInstance();
+        $auth = TBS_Auth::getInstance();
         if (!$auth->hasIdentity()) {
             throw new Zend_Controller_Action_Exception('Not logged in!', 404);
         }
@@ -62,7 +62,7 @@ class UserController extends Zend_Controller_Action
 
     public function logoutAction()
     {
-        \TBS\Auth::getInstance()->clearIdentity();
+        TBS_Auth::getInstance()->clearIdentity();
         $this->_redirect('/');
     }
 }
