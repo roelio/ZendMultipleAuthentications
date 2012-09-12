@@ -19,6 +19,10 @@ class UserController extends Zend_Controller_Action
                                 $this->_getParam('code'));
                         $result = $auth->authenticate($adapter);
                     }
+                    if($this->_hasParam('error')) {
+                        throw new Zend_Controller_Action_Exception('Facebook login failed, response is: ' . 
+                            $this->_getParam('error'));
+                    }
                     break;
                 case "twitter":
                     if ($this->_hasParam('oauth_token')) {
@@ -27,24 +31,29 @@ class UserController extends Zend_Controller_Action
                     }
                     break;
                 case "google":
+                
                     if ($this->_hasParam('code')) {
                         $adapter = new TBS\Auth\Adapter\Google(
                                 $this->_getParam('code'));
                         $result = $auth->authenticate($adapter);
                     }
+                    if($this->_hasParam('error')) {
+                        throw new Zend_Controller_Action_Exception('Google login failed, response is: ' . 
+                            $this->_getParam('error'));
+                    }
                     break;
 
             }
             // What to do when invalid
-            if (!$result->isValid()) {
+            if (isset($result) && !$result->isValid()) {
                 $auth->clearIdentity($this->_getParam('provider'));
-                throw new Exception('Error!!');
+                throw new Zend_Controller_Action_Exception('Login failed');
             } else {
                 $this->_redirect('/user/connect');
             }
         } else { // Normal login page
             $this->view->googleAuthUrl = TBS\Auth\Adapter\Google::getAuthorizationUrl();
-
+            $this->view->googleAuthUrlOffline = TBS\Auth\Adapter\Google::getAuthorizationUrl(true);
             $this->view->facebookAuthUrl = TBS\Auth\Adapter\Facebook::getAuthorizationUrl();
 
             $this->view->twitterAuthUrl = \TBS\Auth\Adapter\Twitter::getAuthorizationUrl();

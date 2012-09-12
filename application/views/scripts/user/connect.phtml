@@ -1,3 +1,27 @@
+<?
+function display($input) {
+	if(is_object($input)) {
+		$input = (array) $input;
+	}
+	if(is_array($input)) {
+		echo '<dl>';
+		foreach($input as $key => $value) {
+			echo '<dt>' . $key . '</dt>';
+			echo '<dd>';
+			if(is_array($value) || is_object($value))
+				display($value);
+			else 
+				echo $value;
+			echo '</dd>';
+		}
+		echo '</dl>';
+	}
+	else {
+		echo $input;
+	}
+}
+?>
+
 <? foreach ($this->providers as $provider):?>
 	<dl>
 		<h3>
@@ -7,67 +31,49 @@
 		<dt>Id from provider</dt>
 		<dd><?=$provider->getId(); ?></dd>
 	<? 
-	if($provider->getName()=='facebook'): 
-	?>
-		<dt>Profile</dt>
-		<dd>
-			<dl>
-			<? 
-			$profile = $provider->getApi()->getProfile(); 
-			foreach($profile as $key => $value): 
-			?>
-				<dt><?= $key ?></dt><dd><?=  (is_object($value)) ?  "Cannot convert to string" : $value ?></dd>
-			<? 
-			endforeach;
-			?>
-			</dl>
-		</dd>
-		<dt>Picture</dt>
-		<dd>
-			<img src="<?=$provider->getApi()->getPicture(); ?>">
-		</dd>
-	<? 
-	endif; 
-	if($provider->getName()=='twitter'): 
-	?>
-		<dt>Profile</dt>
-		<dd>
-			<dl>
-			<? 
-			$profile = $provider->getApi()->getProfile(); 
-			foreach($profile as $key => $value): 
-			?>
-				<dt><?= $key ?></dt>
-				<dd><?=  (is_object($value)) ?  "Cannot convert to string" : $value ?></dd>
-			<? 
-			endforeach;
-			?>
-			</dl>
-		</dd>
-		<dt>Picture</dt>
-		<dd>
-			<img src="<?=$provider->getApi()->getPicture(); ?>">
-		</dd>
-	<? 
-	endif; 
-	if($provider->getName()=='google'): 
-	?>
-		<dt>Profile</dt>
-		<dd>
-			<dl>
-			<? 
-			$profile = $provider->getApi()->getProfile(); 
-			foreach($profile as $key => $value): 
-			?>
-				<dt><?= $key ?></dt>
-				<dd><?=  (is_object($value)) ?  "Cannot convert to string" : $value ?></dd>
-			<? 
-			endforeach;
-			?>
-			</dl>
-		</dd>
-	<? 
-	endif; 
+	switch ($provider->getName()) {
+		case 'facebook': 
+		?>
+			<dt>Profile</dt>
+			<dd>
+				<? 
+				$profile = $provider->getApi()->getProfile(); 
+				display($profile);
+				?>
+			</dd>
+			<dt>Picture</dt>
+			<dd>
+				<img src="<?=$provider->getApi()->getPicture(); ?>">
+			</dd>
+		<? 
+		break; 
+		case 'twitter': 
+		?>
+			<dt>Profile</dt>
+			<dd>
+				<? 
+				$profile = $provider->getApi()->getProfile(); 
+				display($profile);
+				?>
+			</dd>
+			<dt>Picture</dt>
+			<dd>
+				<img src="<?=$provider->getApi()->getPicture(); ?>">
+			</dd>
+		<? 
+		break; 
+		case 'google': 
+		?>
+			<dt>Profile</dt>
+			<dd>
+				<? 
+				$profile = $provider->getApi()->getProfile(); 
+				display($profile);
+				?>
+			</dd>
+		<? 
+		break; 
+	}
 	?>
 	</dl>
 <? 
