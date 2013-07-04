@@ -1,4 +1,4 @@
-<?
+<?php
 function display($input) {
 	if(is_object($input)) {
 		$input = (array) $input;
@@ -22,21 +22,21 @@ function display($input) {
 }
 ?>
 
-<? foreach ($this->providers as $provider):?>
+<?php foreach ($this->providers as $provider):?>
 	<dl>
 		<h3>
 			<dt>Provider name</dt>
-			<dd><? echo $provider->getName(); ?></dd>
+			<dd><?= $provider->getName(); ?></dd>
 		</h3>
 		<dt>Id from provider</dt>
 		<dd><?=$provider->getId(); ?></dd>
-	<? 
+	<?php 
 	switch ($provider->getName()) {
 		case 'facebook': 
 		?>
 			<dt>Profile</dt>
 			<dd>
-				<? 
+				<?php 
 				$profile = $provider->getApi()->getProfile(); 
 				display($profile);
 				?>
@@ -45,13 +45,13 @@ function display($input) {
 			<dd>
 				<img src="<?=$provider->getApi()->getPicture(); ?>">
 			</dd>
-		<? 
+		<?php 
 		break; 
 		case 'twitter': 
 		?>
 			<dt>Profile</dt>
 			<dd>
-				<? 
+				<?php 
 				$profile = $provider->getApi()->getProfile(); 
 				display($profile);
 				?>
@@ -60,22 +60,22 @@ function display($input) {
 			<dd>
 				<img src="<?=$provider->getApi()->getPicture(); ?>">
 			</dd>
-		<? 
+		<?php 
 		break; 
 		case 'google': 
 		?>
 			<dt>Profile</dt>
 			<dd>
-				<? 
+				<?php 
 				$profile = $provider->getApi()->getProfile(); 
 				display($profile);
 				?>
 			</dd>
-		<? 
+		<?php 
 		break; 
 	}
 	?>
 	</dl>
-<? 
+<?php 
 endforeach;
 ?>
